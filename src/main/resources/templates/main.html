@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exambyte</title>
+    <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #343a40;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            padding: 5px 15px;
+            text-decoration: none;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .details {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .no-style {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/" class="no-style" >Exambyte</a></h1>
+    </header>
+
+    <main>
+        <section class="container">
+            <div th:if="${user}">
+                <div> <h2> Hallo <span th:text="${user}">Max Mustermann</span> </h2></div>
+                <div class="row m-3">
+                    <form th:action="@{/logout}" method="post">
+                        <input class="btn btn-dark" type="submit" value="Logout">
+                    </form>
+                </div>
+                <div class="row m-3">
+                    <a href="/"><button class="btn btn-dark">Tests</button></a>
+                </div>
+            </div>
+
+            <div th:unless="${user}" >
+                <div class="row m-3">
+                    <a href="/oauth2/authorization/github"><button class="btn btn-dark">Login using GitHub</button></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

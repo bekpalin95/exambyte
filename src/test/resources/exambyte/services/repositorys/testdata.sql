@@ -1,0 +1,1 @@
+insert into test default values;

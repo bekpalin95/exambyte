@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exambyte</title>
+    <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #343a40;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            padding: 5px 15px;
+            text-decoration: none;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .details {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .no-style {
+            text-decoration: none; /* Entfernt die Unterstreichung */
+            color: inherit; /* Erbt die Textfarbe vom übergeordneten Element (h1) */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/" class="no-style" >Exambyte</a></h1>
+        <form method="get" action="/logout">
+            <button class="btn btn-danger">Abmelden</button>
+        </form>
+    </header>
+
+    <section th:if="${error == null}" class="container">
+        <section class="mt-4">
+            <h2>Ergebnisse</h2>
+            <p>Sie haben den Test <strong th:text="${testResult.isBestanden() ? 'bestanden' : 'nicht bestanden'}">bestanden</strong></p>
+            <p>Erreichte Punkte: <span th:text="${testResult.getErreichtePunkte()}">10</span>/<span th:text="${gesamtPunktzahl}">20</span> Pt.</p>
+        </section>
+
+        <section class="mt-4">
+            <div>
+                <h3>Ihre Antworten:</h3>
+                <ul th:each="antwort, iterStat : ${userAntworten}">
+                    <li>
+                        <h4>Frage <span th:text="${iterStat.index}+1">1</span>:</h4>
+                        <ul>
+                            <li> <span th:text="${antwort.antwort()}">Dummy</span> </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="mt-4">
+            <div>
+                <h3>Korrekte Antworten:</h3>
+                <ul th:each="frage, iterStat : ${fragen}">
+                    <li>
+                        <h4>Frage <span th:text="${iterStat.index}+1">1</span>:</h4>
+                        <ul>
+                            <li> <span th:text="${frage.getKorrekteAntworten()}">Dummy</span> </li>
+                            <li> <p>Erklärung: <span th:text="${frage.getErklaerung()}"></span></p> </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <section>
+                <a th:href="@{/test/vorschau/{testId}(testId=${testId})}">Zurück</a>
+            </section>
+        </section>
+    </section>
+
+    <div class="container" th:if="${error}">
+        <p class="mt-5">Ein Fehler ist aufgetreten</p>
+        <p class="mt-3 alert alert-danger" th:text="${error}">Ihre Eingaben war nicht gültig.</p>
+        <section>
+            <a th:href="@{/test/vorschau/{testId}(testId=${testId})}">Zurück</a>
+        </section>
+    </div>
+
+
+</body>
+</html>

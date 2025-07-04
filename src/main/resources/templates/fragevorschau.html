@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frage Vorschau</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <style>
+        body {
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #343a40;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            padding: 5px 15px;
+            text-decoration: none;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .details {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .no-style {
+            text-decoration: none; /* Entfernt die Unterstreichung */
+            color: inherit; /* Erbt die Textfarbe vom übergeordneten Element (h1) */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><a href="/" class="no-style" >Exambyte</a></h1>
+    <form method="get" action="/logout">
+        <button class="btn btn-danger">Abmelden</button>
+    </form>
+</header>
+<section class="container">
+    <div>
+
+        <!-- Fragedetails -->
+        <section class="mt-4">
+            <h2>Fragedetails</h2>
+            <p><strong>Fragestellung:</strong> <span th:text="${frage.fragestellung}">Beschreibung der Frage...</span></p>
+            <p><strong>Maximale Punkte:</strong> <span th:text="${frage.punktzahl}">10</span> Pt.</p>
+        </section>
+
+        <!-- Frageinhalt je nach Typ -->
+        <section class="mt-4">
+            <div>
+                <!-- Multiple-Choice Vorschau -->
+                <div>
+                    <h3>Antwortmöglichkeiten:</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item" th:each="antwort : ${antwortMoeglichkeiten}">
+                            <div class="row">
+                                <div class="col">
+                                    <p>
+                                        <span th:utext="${antwort}"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <p>
+                        <strong>Korrekte Antworten:</strong>
+                    </p>
+                    <ul class="list-group">
+                        <li class="list-group-item" th:each="antwort : ${korrekteAntworten}">
+                            <div class="row">
+                                <div class="col">
+                                    <p>
+                                        <span th:utext="${antwort}"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <p>
+                        <strong>Erklärung:</strong> <span th:text="${frage.erklaerung}"></span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-4">
+            <a th:href="@{/test/vorschau/{testId}(testId=${testId})}" class="btn btn-secondary">Zurück zum Test</a>
+        </section>
+    </div>
+</section>
+</body>
+</html>

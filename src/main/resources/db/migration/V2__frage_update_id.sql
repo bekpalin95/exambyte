@@ -1,0 +1,1 @@
+alter table frage add column id serial primary key;

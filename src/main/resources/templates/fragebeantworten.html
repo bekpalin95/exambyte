@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frage beantworten</title>
+    <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #343a40;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            padding: 5px 15px;
+            text-decoration: none;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .details {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .no-style {
+            text-decoration: none; /* Entfernt die Unterstreichung */
+            color: inherit; /* Erbt die Textfarbe vom übergeordneten Element (h1) */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/" class="no-style" >Exambyte</a></h1>
+        <form method="get" action="/logout">
+            <button class="btn btn-danger">Abmelden</button>
+        </form>
+    </header>
+
+    <div class="container">
+
+        <h2>Fragestellung: <span th:text="${frage.fragestellung}">Fragestellung</span></h2>
+        <p>Punktzahl: <span th:text="${frage.punktzahl}">1</span>. Punkte</p>
+
+        <form method="post" th:action="@{/test/antwortspeichern}">
+            <input type="hidden" name="frageId" th:value="${frage.id}">
+            <input type="hidden" name="index" th:value="${index}">
+            <input type="hidden" name="testId" th:value="${testId}">
+            <div th:each="option : ${antwortMoeglichkeiten}">
+                <input th:checked="${antwort != null && antwort.contains(option)}" type="checkbox" name="antwort" th:value="${option}">
+                <label th:for="${option}" th:text="${option}"></label>
+            </div>
+            <br>
+            <div class="col">
+                <a th:if="${index} > 0" th:href="@{/test/durchfuehren/{testId}/{index}(testId=${testId},index=${index}-1)}" >Zurück</a>
+                <a th:if="${index} < ${fragenAnzahl}-1" th:href="@{/test/durchfuehren/{testId}/{index}(testId=${testId},index=${index}+1)}" >Weiter</a>
+            </div>
+            <br>
+            <button type="submit">Antwort speichern</button>
+        </form>
+        <br>
+        <form method="post" th:action="@{/test/beenden}">
+            <input type="hidden" name="testId" th:value="${testId}">
+            <button type="submit" class="btn-custom">Test beenden</button>
+        </form>
+
+    </div>
+
+</body>
+</html>

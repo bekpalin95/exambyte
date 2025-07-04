@@ -1,0 +1,17 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            scope: read:public_repo
+  datasource:
+    password: ${DB_PASSWORD}
+    username: user
+    url: jdbc:postgresql://localhost:5432/postgres
+
+exambyte:
+  rollen:
+    admin: bekpalin95

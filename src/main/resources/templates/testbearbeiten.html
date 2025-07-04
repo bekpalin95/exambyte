@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exambyte</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #343a40;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            padding: 5px 15px;
+            text-decoration: none;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .details {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .no-style {
+            text-decoration: none; /* Entfernt die Unterstreichung */
+            color: inherit; /* Erbt die Textfarbe vom übergeordneten Element (h1) */
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1><a href="/" class="no-style" >Exambyte</a></h1>
+    <form method="get" action="/logout">
+        <button class="btn btn-danger">Abmelden</button>
+    </form>
+</header>
+<div class="container">
+    <section class="mt-4">
+        <h2>Fragen</h2>
+        <ul class="list-group" th:remove="all-but-first">
+            <li class="list-group-item" th:each="frage : ${fragen}" th:object="${frage}">
+                <div class="row">
+                    <div class="col">
+                        <span th:utext="*{fragestellung}">Was auch immer</span>
+                    </div>
+                    <form class="col-sm" method="post" th:action="@{/test/deletefrage}">
+                        <input type="hidden" name="frageId" th:value="${frage.id}">
+                        <input type="hidden" name="testId" th:value="${test.id}">
+                        <button class="btn btn-danger" type="submit">Löschen</button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <!-- Formular zum Hinzufügen von Fragen -->
+    <section class="mt-5">
+        <h2>Frage hinzufügen</h2>
+        <form method="post" th:action="@{/test/addfrage}">
+            <input type="hidden" name="testId" th:value="${test.id}">
+
+            <!-- Fragestellung -->
+            <div class="mb-3">
+                <label for="questionText" class="form-label">Fragestellung</label>
+                <textarea id="questionText" class="form-control" name="fragestellung" required></textarea>
+            </div>
+
+            <!-- Anzahl Punkte -->
+            <div class="mb3">
+                <label for="anzahlPunkte" class="form-label">Anzahl Punkte</label>
+                <input id="anzahlPunkte" class="form-control" type="number"  name="punkte" required></input>
+            </div>
+
+            <!-- Fragetype-Auswahl -->
+            <div class="mb-3">
+                <label for="frageTyp" class="form-label">Fragetyp</label>
+                <select id="frageTyp" class="form-select" name="frageTyp" onchange="toggleQuestionType()" required>
+                    <option value="" disabled selected>Bitte wählen</option>
+                    <option value="multipleChoice">Multiple-Choice</option>
+                    <!--<option value="freitext">Freitext</option>-->
+                </select>
+            </div>
+
+            <!-- Multiple-Choice-Bereich -->
+            <div id="multipleChoiceFields" style="display: none;">
+                <div class="mb-3">
+                    <label for="answerOptions" class="form-label">Antwortmöglichkeiten</label>
+                    <textarea id="answerOptions" class="form-control" name="antwortMoeglichkeiten" placeholder="Trenne die Optionen mit einem Semikolon (;)"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="correctAnswers" class="form-label">Korrekte Antworten</label>
+                    <input id="correctAnswers" type="text" class="form-control" name="korrekteAntworten" placeholder="Trenne die richtigen Antworten mit einem Semikolon (;)">
+                </div>
+                <div class="mb-3">
+                    <label for="explanation" class="form-label">Erklärung</label>
+                    <textarea id="explanation" class="form-control" name="erklaerung"></textarea>
+                </div>
+            </div>
+
+            <!-- Freitext-Bereich
+            <div id="freitextFields" style="display: none;">
+                <div class="mb-3">
+                    <label for="solutionSuggestion" class="form-label">Lösungsvorschlag</label>
+                    <textarea id="solutionSuggestion" class="form-control" name="loesungsvorschlag"></textarea>
+                </div>
+            </div>-->
+
+            <!-- Submit-Button -->
+            <button class="mt-2 btn btn-primary" type="submit">Frage hinzufügen</button>
+        </form>
+    </section>
+
+    <section class="mt-5">
+        <a href="/">Zur Übersicht</a>
+    </section>
+
+    <div class="container" th:if="${error}">
+        <p class="mt-3 alert alert-danger" th:text="${error}">Ihre Eingaben war nicht gültig.</p>
+    </div>
+</div>
+<script>
+    function toggleQuestionType() {
+        const frageTyp = document.getElementById('frageTyp').value;
+        document.getElementById('multipleChoiceFields').style.display = (frageTyp === 'multipleChoice') ? 'block' : 'none';
+        document.getElementById('freitextFields').style.display = (frageTyp === 'freitext') ? 'block' : 'none';
+    }
+</script>
+</body>
+</html>
