@@ -14,7 +14,7 @@ public class WebSecurityConfiguration {
     chainBuilder.authorizeHttpRequests(
             c -> c.requestMatchers("/css/*", "/img/**", "/main").permitAll()
                 .anyRequest().authenticated()
-        ).logout(l -> l.logoutSuccessUrl("/main").permitAll())
+        ).logout(l -> l.logoutSuccessUrl("/").permitAll())
         .oauth2Login(Customizer.withDefaults());
 
     return chainBuilder.build();

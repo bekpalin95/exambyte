@@ -27,7 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TestController {
-//jsjdjaj
+
   private final TestService testService;
   private final TestBewertungService testBewertungService;
 
