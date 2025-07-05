@@ -3,7 +3,6 @@ package exambyte.adapters.web;
 import exambyte.domain.dto.FrageDTO;
 import exambyte.domain.dto.UserAntwortDTO;
 import exambyte.domain.test.Frage;
-import exambyte.domain.test.Test;
 import exambyte.domain.user.TestResult;
 import exambyte.services.TestBewertungService;
 import exambyte.services.TestService;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,29 +27,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class TestController {
-
-  private TestService testService;
-  private TestBewertungService testBewertungService;
+//jsjdjaj
+  private final TestService testService;
+  private final TestBewertungService testBewertungService;
 
   public TestController(TestService testService, TestBewertungService testBewertungService) {
     this.testService = testService;
     this.testBewertungService = testBewertungService;
   }
 
-  @GetMapping("/main")
+  @GetMapping("/")
   public String main(Model model, @AuthenticationPrincipal OAuth2User principal) {
     model.addAttribute("user", principal != null ? principal.getAttribute("login") : null);
-    return "main";
+    return "index";
   }
 
-  @GetMapping("/")
+  @GetMapping("/main")
   public String index(Model model, @AuthenticationPrincipal OAuth2User user) {
     if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
       model.addAttribute("admin", true);
     }
     model.addAttribute("username", user.getAttribute("login"));
     model.addAttribute("tests", testService.getAllTests());
-    return "index";
+    return "main";
   }
 
   @GetMapping("/test/bearbeiten/{id}")
