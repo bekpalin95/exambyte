@@ -202,7 +202,7 @@ public class TestController {
                           Model model) {
     Optional<TestResult> testResult =
         testBewertungService.getTestResult(user.getAttribute("login"), testId);
-    if(!testResult.isPresent()) {
+    if(testResult.isEmpty()) {
       model.addAttribute("error", "Sie haben den Test noch nicht bearbeitet");
     }else {
       model.addAttribute("testResult", testResult.get());
